@@ -15,11 +15,11 @@
       font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
       background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
       min-height: 100vh;
-      padding: 10px;
+      padding: 20px;
     }
     
     .container {
-      max-width: 1200px;
+      max-width: 1000px;
       margin: 0 auto;
       background: white;
       border-radius: 20px;
@@ -30,32 +30,52 @@
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 20px;
+      padding: 30px;
       text-align: center;
     }
     
     .header h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      font-size: 42px;
+      margin: 0;
     }
     
     .content {
+      padding: 30px;
+    }
+    
+    /* タイマー表示 */
+    .timer-display {
+      background: #fff3cd;
       padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      color: #856404;
+      margin-bottom: 30px;
+    }
+    
+    .timer-display.warning {
+      background: #f8d7da;
+      color: #721c24;
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
     }
     
     /* 動画プレイヤー */
-    .video-section {
-      margin-bottom: 20px;
-    }
-    
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
       height: 0;
       overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
       background: #000;
+      margin-bottom: 30px;
     }
     
     .video-wrapper #player {
@@ -74,187 +94,130 @@
       width: 100%;
       height: 100%;
       background: transparent;
-      z-index: 1000;
+      z-index: 100;
       pointer-events: auto;
     }
     
-    /* コントロールパネル */
-    .controls {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+    .video-block-overlay.unlocked {
+      pointer-events: none;
     }
     
-    .control-group {
+    /* コントロールボタン */
+    .controls {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 20px;
       justify-content: center;
-      margin-bottom: 15px;
+      flex-wrap: wrap;
     }
     
     .control-btn {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      padding: 15px 30px;
-      font-size: 18px;
+      padding: 30px 60px;
+      font-size: 32px;
       font-weight: bold;
-      border-radius: 12px;
+      border-radius: 20px;
       cursor: pointer;
       transition: all 0.3s;
-      min-width: 120px;
-    }
-    
-    .control-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      min-width: 200px;
     }
     
     .control-btn:active {
-      transform: translateY(0);
-    }
-    
-    .control-btn.active {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    }
-    
-    .control-btn.danger {
-      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    }
-    
-    /* プレイリスト */
-    .playlist {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    
-    .playlist h2 {
-      color: #667eea;
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-    
-    .playlist-items {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 15px;
-    }
-    
-    .playlist-item {
-      background: white;
-      border: 3px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-align: center;
-    }
-    
-    .playlist-item:hover {
-      border-color: #667eea;
-      transform: scale(1.05);
+      transform: scale(0.95);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
     
-    .playlist-item.active {
-      border-color: #28a745;
-      background: #d4edda;
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     
-    .playlist-item-title {
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 5px;
+    .control-btn.ad-skip {
+      background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+      box-shadow: 0 8px 20px rgba(255, 167, 38, 0.4);
     }
     
-    .playlist-item-duration {
-      font-size: 12px;
-      color: #666;
-    }
-    
-    /* タイマー表示 */
-    .timer-display {
+    /* 広告通知 */
+    .ad-notice {
       background: #fff3cd;
-      padding: 15px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #856404;
-      margin-bottom: 20px;
-    }
-    
-    .timer-display.warning {
-      background: #f8d7da;
-      color: #721c24;
-      animation: pulse 1s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    
-    /* 設定パネル */
-    .settings {
-      background: #e7f3ff;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 16px;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .ad-notice.show {
+      display: block;
+    }
+    
+    .ad-notice p {
+      color: #856404;
+      font-weight: bold;
+      font-size: 24px;
+      margin: 0;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    /* 完了画面 */
+    .completion-screen {
+      text-align: center;
+      padding: 60px 30px;
+    }
+    
+    .completion-icon {
+      font-size: 120px;
+      margin-bottom: 30px;
+      animation: bounce 1s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-30px); }
+    }
+    
+    .completion-screen h2 {
+      color: #667eea;
+      font-size: 48px;
       margin-bottom: 20px;
     }
     
-    .settings h2 {
-      color: #1565c0;
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-    
-    .setting-item {
-      margin-bottom: 15px;
-    }
-    
-    .setting-item label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    
-    .setting-item input,
-    .setting-item select {
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .checkbox-group input[type="checkbox"] {
-      width: auto;
-      transform: scale(1.5);
+    .completion-screen p {
+      color: #666;
+      font-size: 28px;
+      line-height: 1.8;
     }
     
     @media (max-width: 768px) {
-      .control-group {
-        flex-direction: column;
+      body {
+        padding: 10px;
+      }
+      
+      .header h1 {
+        font-size: 32px;
+      }
+      
+      .content {
+        padding: 20px;
       }
       
       .control-btn {
         width: 100%;
+        padding: 25px 40px;
+        font-size: 28px;
       }
       
-      .playlist-items {
-        grid-template-columns: 1fr;
+      .timer-display {
+        font-size: 28px;
+      }
+      
+      .ad-notice p {
+        font-size: 20px;
       }
     }
   </style>
@@ -262,101 +225,65 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎈 こども向けどうが 🎈</h1>
+      <h1>🎈 どうが 🎈</h1>
     </div>
     
-    <div class="content">
+    <div class="content" id="mainContent">
       <!-- タイマー表示 -->
-      <div id="timerDisplay" class="timer-display" style="display:none;">
-        のこり時間: <span id="remainingTime">--:--</span>
+      <div id="timerDisplay" class="timer-display hidden">
+        のこり: <span id="remainingTime">--:--</span>
       </div>
       
       <!-- 動画プレイヤー -->
-      <div class="video-section">
-        <div class="video-wrapper">
-          <div id="player"></div>
-          <div id="videoBlockOverlay" class="video-block-overlay"></div>
-        </div>
+      <div class="video-wrapper">
+        <div id="player"></div>
+        <div id="videoBlockOverlay" class="video-block-overlay"></div>
       </div>
       
-      <!-- コントロールパネル -->
+      <!-- コントロールボタン -->
       <div class="controls">
-        <h2 style="text-align:center; margin-bottom:15px; color:#667eea;">コントロール（おやようこうせい）</h2>
-        <div class="control-group">
-          <button class="control-btn" id="playBtn" onclick="playVideo()">▶️ さいせい</button>
-          <button class="control-btn" id="pauseBtn" onclick="pauseVideo()" style="display:none;">⏸️ いちじていし</button>
-          <button class="control-btn" id="loopBtn" onclick="toggleLoop()">🔁 ループ: オフ</button>
-          <button class="control-btn" id="autoplayBtn" onclick="toggleAutoplay()">⏭️ じどう: オフ</button>
-          <button class="control-btn danger" onclick="stopAndReset()">⏹️ ていし</button>
-        </div>
+        <button class="control-btn" id="playBtn" onclick="playVideo()">
+          ▶️<br>さいせい
+        </button>
+        <button class="control-btn hidden" id="pauseBtn" onclick="pauseVideo()">
+          ⏸️<br>いちじていし
+        </button>
+        <button class="control-btn ad-skip hidden" id="adSkipBtn" onclick="enableAdSkip()">
+          ⏭️<br>こうこく<br>とばす
+        </button>
       </div>
       
-      <!-- プレイリスト -->
-      <div class="playlist">
-        <h2>📺 どうが一覧</h2>
-        <div id="playlistItems" class="playlist-items">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
+      <!-- 広告通知 -->
+      <div id="adNotice" class="ad-notice">
+        <p>⏳ 10びょうかん こうこくをとばせるよ</p>
       </div>
-      
-      <!-- 設定パネル -->
-      <div class="settings">
-        <h2>⚙️ せってい</h2>
-        
-        <div class="setting-item">
-          <label>しちょう時間せいげん（分）</label>
-          <select id="timeLimitSelect" onchange="setTimeLimit()">
-            <option value="0">せいげんなし</option>
-            <option value="5">5分</option>
-            <option value="10">10分</option>
-            <option value="15">15分</option>
-            <option value="20">20分</option>
-            <option value="30">30分</option>
-            <option value="60">60分</option>
-          </select>
-        </div>
-        
-        <div class="setting-item checkbox-group">
-          <input type="checkbox" id="parentLockCheck" onchange="toggleParentLock()">
-          <label for="parentLockCheck">がめんをロックする（タップぼうし）</label>
-        </div>
-      </div>
+    </div>
+    
+    <!-- 完了画面 -->
+    <div id="completionScreen" class="completion-screen hidden">
+      <div class="completion-icon">🎉</div>
+      <h2>おわったよ！</h2>
+      <p>よくできました！</p>
     </div>
   </div>
   
   <script>
     let player = null;
     let playerReady = false;
-    let isLooping = false;
-    let isAutoplay = false;
     let currentVideoIndex = 0;
-    let timeLimit = 0; // 分単位
     let startTime = null;
     let timerInterval = null;
-    let isParentLocked = true;
     
-    // プレイリスト（URLパラメータから取得、またはデフォルト）
+    // URLパラメータから設定を取得
     const urlParams = new URLSearchParams(window.location.search);
-    const playlistParam = urlParams.get('playlist');
+    const playlistParam = urlParams.get('playlist') || 'dQw4w9WgXcQ';
+    const isLooping = urlParams.get('loop') === '1';
+    const isAutoplay = urlParams.get('auto') === '1';
+    const timeLimit = parseInt(urlParams.get('time') || '0'); // 分単位
+    const isLocked = urlParams.get('lock') !== '0'; // デフォルトでロック
     
-    let playlist = [];
-    
-    if (playlistParam) {
-      // カンマ区切りの動画IDを取得
-      const videoIds = playlistParam.split(',');
-      playlist = videoIds.map((id, index) => ({
-        id: id.trim(),
-        title: `動画 ${index + 1}`,
-        duration: ''
-      }));
-    } else {
-      // デフォルトのプレイリスト
-      playlist = [
-        { id: 'dQw4w9WgXcQ', title: '動画 1', duration: '3:33' },
-        { id: 'hMVpJUeb4WU', title: '動画 2', duration: '5:00' },
-        { id: '59RXfd2fPGQ', title: '動画 3', duration: '4:20' }
-      ];
-    }
+    // プレイリストを解析
+    const playlist = playlistParam.split(',').map(id => id.trim());
     
     // YouTube IFrame API を読み込み
     var tag = document.createElement('script');
@@ -366,12 +293,22 @@
     
     function onYouTubeIframeAPIReady() {
       loadVideo(0);
-      renderPlaylist();
+      
+      // 画面ロック設定
+      const overlay = document.getElementById('videoBlockOverlay');
+      if (!isLocked) {
+        overlay.classList.add('unlocked');
+      }
+      
+      // タイマー表示
+      if (timeLimit > 0) {
+        document.getElementById('timerDisplay').classList.remove('hidden');
+      }
     }
     
     function loadVideo(index) {
       currentVideoIndex = index;
-      const videoId = playlist[index].id;
+      const videoId = playlist[index];
       
       if (player) {
         player.loadVideoById(videoId);
@@ -397,8 +334,6 @@
           }
         });
       }
-      
-      updatePlaylistUI();
     }
     
     function onPlayerReady(event) {
@@ -407,24 +342,29 @@
     
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.PLAYING) {
-        document.getElementById('playBtn').style.display = 'none';
-        document.getElementById('pauseBtn').style.display = 'inline-block';
+        document.getElementById('playBtn').classList.add('hidden');
+        document.getElementById('pauseBtn').classList.remove('hidden');
         
-        if (!startTime) {
+        // 広告スキップボタンを表示（再生開始から3秒後）
+        setTimeout(() => {
+          document.getElementById('adSkipBtn').classList.remove('hidden');
+        }, 3000);
+        
+        // タイマー開始
+        if (!startTime && timeLimit > 0) {
           startTime = Date.now();
           startTimer();
         }
       } else if (event.data == YT.PlayerState.PAUSED) {
-        document.getElementById('playBtn').style.display = 'inline-block';
-        document.getElementById('pauseBtn').style.display = 'none';
+        document.getElementById('playBtn').classList.remove('hidden');
+        document.getElementById('pauseBtn').classList.add('hidden');
       } else if (event.data == YT.PlayerState.ENDED) {
         if (isLooping) {
           player.playVideo();
-        } else if (isAutoplay) {
+        } else if (isAutoplay && currentVideoIndex < playlist.length - 1) {
           playNext();
         } else {
-          document.getElementById('playBtn').style.display = 'inline-block';
-          document.getElementById('pauseBtn').style.display = 'none';
+          showCompletionScreen();
         }
       }
     }
@@ -441,32 +381,6 @@
       }
     }
     
-    function toggleLoop() {
-      isLooping = !isLooping;
-      const btn = document.getElementById('loopBtn');
-      btn.textContent = isLooping ? '🔁 ループ: オン' : '🔁 ループ: オフ';
-      btn.classList.toggle('active', isLooping);
-      
-      if (isLooping) {
-        isAutoplay = false;
-        document.getElementById('autoplayBtn').textContent = '⏭️ じどう: オフ';
-        document.getElementById('autoplayBtn').classList.remove('active');
-      }
-    }
-    
-    function toggleAutoplay() {
-      isAutoplay = !isAutoplay;
-      const btn = document.getElementById('autoplayBtn');
-      btn.textContent = isAutoplay ? '⏭️ じどう: オン' : '⏭️ じどう: オフ';
-      btn.classList.toggle('active', isAutoplay);
-      
-      if (isAutoplay) {
-        isLooping = false;
-        document.getElementById('loopBtn').textContent = '🔁 ループ: オフ';
-        document.getElementById('loopBtn').classList.remove('active');
-      }
-    }
-    
     function playNext() {
       currentVideoIndex = (currentVideoIndex + 1) % playlist.length;
       loadVideo(currentVideoIndex);
@@ -475,54 +389,26 @@
       }
     }
     
-    function stopAndReset() {
-      if (player && playerReady) {
-        player.stopVideo();
-      }
-      document.getElementById('playBtn').style.display = 'inline-block';
-      document.getElementById('pauseBtn').style.display = 'none';
-      stopTimer();
-    }
-    
-    function renderPlaylist() {
-      const container = document.getElementById('playlistItems');
-      container.innerHTML = '';
+    function enableAdSkip() {
+      const overlay = document.getElementById('videoBlockOverlay');
+      const notice = document.getElementById('adNotice');
+      const btn = document.getElementById('adSkipBtn');
       
-      playlist.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'playlist-item';
-        if (index === currentVideoIndex) {
-          div.classList.add('active');
+      overlay.classList.add('unlocked');
+      notice.classList.add('show');
+      btn.disabled = true;
+      btn.innerHTML = '⏳<br>まって<br>てね';
+      
+      setTimeout(() => {
+        overlay.classList.remove('unlocked');
+        if (isLocked) {
+          overlay.style.pointerEvents = 'auto';
         }
-        div.onclick = () => loadVideo(index);
-        
-        div.innerHTML = `
-          <div class="playlist-item-title">${item.title}</div>
-          ${item.duration ? `<div class="playlist-item-duration">${item.duration}</div>` : ''}
-        `;
-        
-        container.appendChild(div);
-      });
-    }
-    
-    function updatePlaylistUI() {
-      const items = document.querySelectorAll('.playlist-item');
-      items.forEach((item, index) => {
-        item.classList.toggle('active', index === currentVideoIndex);
-      });
-    }
-    
-    function setTimeLimit() {
-      const select = document.getElementById('timeLimitSelect');
-      timeLimit = parseInt(select.value);
-      
-      if (timeLimit > 0) {
-        document.getElementById('timerDisplay').style.display = 'block';
-        updateTimerDisplay();
-      } else {
-        document.getElementById('timerDisplay').style.display = 'none';
-        stopTimer();
-      }
+        notice.classList.remove('show');
+        btn.classList.add('hidden');
+        btn.disabled = false;
+        btn.innerHTML = '⏭️<br>こうこく<br>とばす';
+      }, 10000);
     }
     
     function startTimer() {
@@ -538,7 +424,6 @@
         clearInterval(timerInterval);
         timerInterval = null;
       }
-      startTime = null;
     }
     
     function updateTimerDisplay() {
@@ -560,41 +445,18 @@
       }
       
       if (remaining === 0) {
-        stopAndReset();
+        if (player && playerReady) {
+          player.pauseVideo();
+        }
         stopTimer();
-        alert('しちょう時間がおわりました！');
+        showCompletionScreen();
       }
     }
     
-    function toggleParentLock() {
-      isParentLocked = document.getElementById('parentLockCheck').checked;
-      const overlay = document.getElementById('videoBlockOverlay');
-      overlay.style.display = isParentLocked ? 'block' : 'none';
+    function showCompletionScreen() {
+      document.getElementById('mainContent').classList.add('hidden');
+      document.getElementById('completionScreen').classList.remove('hidden');
     }
-    
-    // 初期化
-    document.getElementById('parentLockCheck').checked = true;
   </script>
 </body>
 </html>
-```
-
----
-
-## 使い方
-
-### 1. 基本的な使い方（デフォルトプレイリスト）
-```
-https://ma-ha720.github.io/video-viewer/kids-viewer.html
-```
-
-### 2. カスタムプレイリスト
-```
-https://ma-ha720.github.io/video-viewer/kids-viewer.html?playlist=dQw4w9WgXcQ,hMVpJUeb4WU,59RXfd2fPGQ
-```
-
-動画IDをカンマ区切りで指定します。
-
-### 3. 単一動画のループ
-```
-https://ma-ha720.github.io/video-viewer/kids-viewer.html?playlist=dQw4w9WgXcQ
