@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>こども向け動画URL生成</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      padding: 30px;
+    }
+    
+    h1 {
+      color: #667eea;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .form-group small {
+      display: block;
+      margin-top: 5px;
+      color: #666;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    
+    .video-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .video-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .video-item input {
+      flex: 1;
+    }
+    
+    .video-item button {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .add-video-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    
+    .btn:hover {
+      background: #5568d3;
+    }
+    
+    .result {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid #667eea;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .result strong {
+      color: #667eea;
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    .result code {
+      background: white;
+      padding: 12px;
+      display: block;
+      border-radius: 6px;
+      font-size: 13px;
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .btn-small {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+    }
+    
+    .btn-preview {
+      background: #28a745;
+    }
+    
+    .btn-preview:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎈 こども向け動画URL生成ツール 🎈</h1>
+    
+    <div class="form-group">
+      <label>動画ID一覧</label>
+      <div id="videoList" class="video-list">
+        <div class="video-item">
+          <input type="text" class="video-id-input" placeholder="例：dQw4w9WgXcQ">
+          <button onclick="removeVideo(this)">削除</button>
+        </div>
+      </div>
+      <button class="add-video-btn" onclick="addVideoInput()">➕ 動画を追加</button>
+      <small>
+        YouTubeの動画IDを入力してください。<br>
+        動画ID は YouTube URLの「v=」の後ろの部分です。<br>
+        例：https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>
+      </small>
+    </div>
+    
+    <button class="btn" onclick="generateUrl()">🔗 URLを生成</button>
+    
+    <div id="result" class="result">
+      <strong>✅ 生成されたURL：</strong>
+      <code id="generatedUrl"></code>
+      <div class="btn-group">
+        <button class="btn btn-small" onclick="copyUrl()">📋 コピー</button>
+        <button class="btn btn-small btn-preview" onclick="openPreview()">👁️ プレビュー</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const BASE_URL = 'https://ma-ha720.github.io/video-viewer/kids-viewer.html';
+    
+    function addVideoInput() {
+      const videoList = document.getElementById('videoList');
+      const div = document.createElement('div');
+      div.className = 'video-item';
+      div.innerHTML = `
+        <input type="text" class="video-id-input" placeholder="例：dQw4w9WgXcQ">
+        <button onclick="removeVideo(this)">削除</button>
+      `;
+      videoList.appendChild(div);
+    }
+    
+    function removeVideo(btn) {
+      const videoList = document.getElementById('videoList');
+      if (videoList.children.length > 1) {
+        btn.parentElement.remove();
+      } else {
+        alert('最低1つの動画が必要です');
+      }
+    }
+    
+    function generateUrl() {
+      const inputs = document.querySelectorAll('.video-id-input');
+      const videoIds = Array.from(inputs)
+        .map(input => input.value.trim())
+        .filter(id => id !== '');
+      
+      if (videoIds.length === 0) {
+        alert('最低1つの動画IDを入力してください');
+        return;
+      }
+      
+      const playlistParam = videoIds.join(',');
+      const url = `${BASE_URL}?playlist=${encodeURIComponent(playlistParam)}`;
+      
+      document.getElementById('generatedUrl').textContent = url;
+      document.getElementById('result').style.display = 'block';
+    }
+    
+    function copyUrl() {
+      const url = document.getElementById('generatedUrl').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('URLをコピーしました！');
+      });
+    }
+    
+    function openPreview() {
+      const url = document.getElementById('generatedUrl').textContent;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
+```
+
+---
+
+## GitHub にアップロード
+
+1. `kids-viewer.html` を作成
+2. `kids-generator.html` を作成
+3. GitHubにコミット
+
+---
+
+## 使用例
+
+### 例1：お気に入りのアニメチャンネル
+```
+https://ma-ha720.github.io/video-viewer/kids-viewer.html?playlist=動画ID1,動画ID2,動画ID3
+```
+
+### 例2：寝かしつけ用（1つの動画をループ）
+```
+https://ma-ha720.github.io/video-viewer/kids-viewer.html?playlist=子守唄の動画ID
+```
+
+設定で「ループ：オン」「視聴時間：30分」
+
+### 例3：教育動画プレイリスト
+
+複数の教育動画を自動再生で順番に視聴
+
+---
+
+## 保護者向けの説明
+```
+【こども向け動画視聴システム】
+
+✅ 安全機能
+・画面ロックで誤タップ防止
+・視聴時間制限（5〜60分）
+・指定した動画のみ再生
+・関連動画の非表示
+
+✅ 便利機能
+・ループ再生（同じ動画を繰り返し）
+・自動再生（プレイリストを順番に）
+・タイマー機能（見すぎ防止）
+
+お子様が安心して動画を楽しめます！
