@@ -19,22 +19,37 @@
     }
     
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       background: white;
       border-radius: 16px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      padding: 30px;
+      padding: 40px;
     }
     
     h1 {
       color: #667eea;
       margin-bottom: 30px;
       text-align: center;
+      font-size: 28px;
+    }
+    
+    .section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .section h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 20px;
     }
     
     .form-group {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
     
     .form-group label {
@@ -45,18 +60,13 @@
     }
     
     .form-group input,
-    .form-group textarea {
+    .form-group select {
       width: 100%;
       padding: 12px;
       border: 2px solid #e0e0e0;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 15px;
       font-family: inherit;
-    }
-    
-    .form-group textarea {
-      min-height: 100px;
-      resize: vertical;
     }
     
     .form-group small {
@@ -71,7 +81,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
     
     .video-item {
@@ -88,75 +98,108 @@
       background: #dc3545;
       color: white;
       border: none;
-      padding: 8px 15px;
+      padding: 10px 20px;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    
+    .video-item button:hover {
+      background: #c82333;
     }
     
     .add-video-btn {
       background: #28a745;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px 25px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
-      margin-bottom: 20px;
+      font-size: 15px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    
+    .add-video-btn:hover {
+      background: #218838;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+    
+    .checkbox-group label {
+      font-weight: normal;
+      cursor: pointer;
+      margin: 0;
     }
     
     .btn {
       background: #667eea;
       color: white;
       border: none;
-      padding: 15px 30px;
-      font-size: 16px;
+      padding: 18px 40px;
+      font-size: 18px;
       font-weight: bold;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       width: 100%;
-      transition: background 0.3s;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
     
     .btn:hover {
       background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
     
     .result {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 8px;
-      border: 2px solid #667eea;
-      margin-top: 20px;
+      background: #e7f3ff;
+      padding: 25px;
+      border-radius: 12px;
+      border: 3px solid #667eea;
+      margin-top: 30px;
       display: none;
     }
     
     .result strong {
       color: #667eea;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      font-size: 18px;
     }
     
     .result code {
       background: white;
-      padding: 12px;
+      padding: 15px;
       display: block;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 13px;
       word-break: break-all;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
     }
     
     .btn-group {
       display: flex;
       gap: 10px;
-      margin-top: 10px;
     }
     
     .btn-small {
       flex: 1;
-      padding: 10px;
-      font-size: 14px;
+      padding: 12px;
+      font-size: 15px;
     }
     
     .btn-preview {
@@ -166,30 +209,97 @@
     .btn-preview:hover {
       background: #218838;
     }
+    
+    .info-box {
+      background: #fff3cd;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #ffc107;
+      margin-top: 20px;
+    }
+    
+    .info-box h3 {
+      color: #856404;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .info-box p {
+      color: #856404;
+      line-height: 1.6;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🎈 こども向け動画URL生成ツール 🎈</h1>
     
-    <div class="form-group">
-      <label>動画ID一覧</label>
-      <div id="videoList" class="video-list">
-        <div class="video-item">
-          <input type="text" class="video-id-input" placeholder="例：dQw4w9WgXcQ">
-          <button onclick="removeVideo(this)">削除</button>
+    <!-- 動画設定 -->
+    <div class="section">
+      <h2>📺 動画設定</h2>
+      
+      <div class="form-group">
+        <label>動画ID一覧</label>
+        <div id="videoList" class="video-list">
+          <div class="video-item">
+            <input type="text" class="video-id-input" placeholder="例：dQw4w9WgXcQ">
+            <button onclick="removeVideo(this)">削除</button>
+          </div>
         </div>
+        <button class="add-video-btn" onclick="addVideoInput()">➕ 動画を追加</button>
+        <small>
+          YouTubeの動画IDを入力してください。<br>
+          動画ID は YouTube URLの「v=」の後ろの部分です。<br>
+          例：https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>
+        </small>
       </div>
-      <button class="add-video-btn" onclick="addVideoInput()">➕ 動画を追加</button>
-      <small>
-        YouTubeの動画IDを入力してください。<br>
-        動画ID は YouTube URLの「v=」の後ろの部分です。<br>
-        例：https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>
+    </div>
+    
+    <!-- 再生設定 -->
+    <div class="section">
+      <h2>⚙️ 再生設定</h2>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="loopCheck">
+        <label for="loopCheck">ループ再生（同じ動画を繰り返す）</label>
+      </div>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="autoplayCheck">
+        <label for="autoplayCheck">自動再生（次の動画に自動で進む）</label>
+      </div>
+      
+      <div class="form-group">
+        <label>視聴時間制限</label>
+        <select id="timeLimitSelect">
+          <option value="0">制限なし</option>
+          <option value="5">5分</option>
+          <option value="10">10分</option>
+          <option value="15">15分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="60">60分</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- 安全設定 -->
+    <div class="section">
+      <h2>🔒 安全設定</h2>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="lockCheck" checked>
+        <label for="lockCheck">画面をロックする（タップ防止）</label>
+      </div>
+      <small style="display:block; margin-left:34px; color:#666;">
+        ※ 広告スキップボタンを押すと10秒間だけロックが解除されます
       </small>
     </div>
     
     <button class="btn" onclick="generateUrl()">🔗 URLを生成</button>
     
+    <!-- 生成結果 -->
     <div id="result" class="result">
       <strong>✅ 生成されたURL：</strong>
       <code id="generatedUrl"></code>
@@ -198,10 +308,38 @@
         <button class="btn btn-small btn-preview" onclick="openPreview()">👁️ プレビュー</button>
       </div>
     </div>
+    
+    <!-- 使い方 -->
+    <div class="info-box">
+      <h3>💡 使い方</h3>
+      <p>
+        1. YouTube動画のIDを入力<br>
+        2. 再生方法と視聴時間を設定<br>
+        3. URLを生成してお子様に共有<br>
+        <br>
+        <strong>お子様の画面：</strong><br>
+        ・大きな「さいせい」「いちじていし」ボタンのみ<br>
+        ・広告が出たら「こうこくとばす」ボタンを押す<br>
+        ・画面ロックで誤タップを防止
+      </p>
+    </div>
   </div>
   
   <script>
     const BASE_URL = 'https://ma-ha720.github.io/kids-viewer/';
+    
+    // ループと自動再生の排他制御
+    document.getElementById('loopCheck').addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('autoplayCheck').checked = false;
+      }
+    });
+    
+    document.getElementById('autoplayCheck').addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('loopCheck').checked = false;
+      }
+    });
     
     function addVideoInput() {
       const videoList = document.getElementById('videoList');
@@ -234,8 +372,33 @@
         return;
       }
       
-      const playlistParam = videoIds.join(',');
-      const url = `${BASE_URL}?playlist=${encodeURIComponent(playlistParam)}`;
+      const params = new URLSearchParams();
+      
+      // プレイリスト
+      params.append('playlist', videoIds.join(','));
+      
+      // ループ再生
+      if (document.getElementById('loopCheck').checked) {
+        params.append('loop', '1');
+      }
+      
+      // 自動再生
+      if (document.getElementById('autoplayCheck').checked) {
+        params.append('auto', '1');
+      }
+      
+      // 視聴時間制限
+      const timeLimit = document.getElementById('timeLimitSelect').value;
+      if (timeLimit !== '0') {
+        params.append('time', timeLimit);
+      }
+      
+      // 画面ロック
+      if (!document.getElementById('lockCheck').checked) {
+        params.append('lock', '0');
+      }
+      
+      const url = `${BASE_URL}?${params.toString()}`;
       
       document.getElementById('generatedUrl').textContent = url;
       document.getElementById('result').style.display = 'block';
@@ -255,3 +418,52 @@
   </script>
 </body>
 </html>
+```
+
+---
+
+## 主な変更点
+
+### 幼児向け画面（kids-viewer.html）
+1. **ボタンは3つだけ**
+   - ▶️ さいせい
+   - ⏸️ いちじていし
+   - ⏭️ こうこく とばす（再生後3秒で表示）
+
+2. **広告スキップ機能**
+   - 大きくて押しやすいオレンジ色のボタン
+   - 押すと10秒間だけ画面ロック解除
+   - 10秒後に自動的にロック復帰
+
+3. **完了画面**
+   - 視聴時間終了またはプレイリスト終了時に表示
+   - 「🎉 おわったよ！よくできました！」
+
+### URL生成ツール（kids-generator.html）
+1. **全ての設定をURLパラメータで指定**
+   - `playlist`: 動画ID（カンマ区切り）
+   - `loop`: ループ再生（1=オン）
+   - `auto`: 自動再生（1=オン）
+   - `time`: 視聴時間制限（分）
+   - `lock`: 画面ロック（0=オフ、デフォルトオン）
+
+2. **排他制御**
+   - ループと自動再生は同時にオンにできない
+
+---
+
+## 使用例
+
+### 例1：寝かしつけ用（1動画ループ、30分）
+```
+https://ma-ha720.github.io/kids-viewer/?playlist=子守唄ID&loop=1&time=30
+```
+
+### 例2：教育動画プレイリスト（自動再生、制限なし）
+```
+https://ma-ha720.github.io/kids-viewer/?playlist=動画1,動画2,動画3&auto=1
+```
+
+### 例3：お気に入り動画（ロックなし、15分）
+```
+https://ma-ha720.github.io/kids-viewer/?playlist=動画ID&time=15&lock=0
