@@ -212,22 +212,27 @@
     
     .info-box {
       background: #fff3cd;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 20px;
+      border-radius: 12px;
       border-left: 4px solid #ffc107;
-      margin-top: 20px;
+      margin-top: 30px;
     }
     
     .info-box h3 {
       color: #856404;
-      margin-bottom: 10px;
-      font-size: 16px;
+      margin-bottom: 15px;
+      font-size: 18px;
     }
     
-    .info-box p {
+    .info-box ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .info-box li {
       color: #856404;
-      line-height: 1.6;
-      margin: 0;
+      line-height: 1.8;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -293,7 +298,7 @@
         <label for="lockCheck">画面をロックする（タップ防止）</label>
       </div>
       <small style="display:block; margin-left:34px; color:#666;">
-        ※ 広告スキップボタンを押すと10秒間だけロックが解除されます
+        ※ 親御さんが「スキップ」ボタンを押すと10秒間だけロックが解除されます
       </small>
     </div>
     
@@ -310,30 +315,37 @@
     </div>
     
     <!-- 使い方 -->
-   <div class="info-box">
-  <h3>💡 使い方</h3>
-  <p>
-    <strong>親御さん向け：</strong><br>
-    1. YouTube動画のIDを入力<br>
-    2. 再生方法と視聴時間を設定<br>
-    3. URLを生成してお子様に共有<br>
-    <br>
-    <strong>お子様の画面：</strong><br>
-    ・大きな ▶️ と ⏸️ ボタンのみ<br>
-    ・画面右にカラフルなブロック（残り時間）<br>
-    ・1分ごとに1個ずつ消える<br>
-    ・全部消えたら 😴 バイバイ画面<br>
-    <br>
-    <strong>広告スキップ：</strong><br>
-    ・親御さん用の小さな「スキップ」ボタンが右上に表示されます<br>
-    ・押すと10秒間だけ画面ロックが解除されます
-  </p>
-</div>
+    <div class="info-box">
+      <h3>💡 使い方ガイド</h3>
+      <ul>
+        <li><strong>親御さんの操作：</strong>
+          <ul>
+            <li>YouTube動画のIDを入力</li>
+            <li>再生方法と視聴時間を設定</li>
+            <li>URLを生成してお子様に共有</li>
+          </ul>
+        </li>
+        <li><strong>お子様の画面：</strong>
+          <ul>
+            <li>大きな ▶️ と ⏸️ ボタンのみ</li>
+            <li>画面右にカラフルなブロック（残り時間）</li>
+            <li>1分ごとに1個ずつ消える</li>
+            <li>全部消えたら 😴 バイバイ画面</li>
+          </ul>
+        </li>
+        <li><strong>広告スキップ：</strong>
+          <ul>
+            <li>親御さん用の小さな「スキップ」ボタンが右上に表示</li>
+            <li>押すと10秒間だけ画面ロックが解除</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
   
   <script>
     const BASE_URL = 'https://ma-ha720.github.io/kids-viewer/';
     
-    // ループと自動再生の排他制御
     document.getElementById('loopCheck').addEventListener('change', function() {
       if (this.checked) {
         document.getElementById('autoplayCheck').checked = false;
@@ -378,27 +390,21 @@
       }
       
       const params = new URLSearchParams();
-      
-      // プレイリスト
       params.append('playlist', videoIds.join(','));
       
-      // ループ再生
       if (document.getElementById('loopCheck').checked) {
         params.append('loop', '1');
       }
       
-      // 自動再生
       if (document.getElementById('autoplayCheck').checked) {
         params.append('auto', '1');
       }
       
-      // 視聴時間制限
       const timeLimit = document.getElementById('timeLimitSelect').value;
       if (timeLimit !== '0') {
         params.append('time', timeLimit);
       }
       
-      // 画面ロック
       if (!document.getElementById('lockCheck').checked) {
         params.append('lock', '0');
       }
@@ -423,52 +429,3 @@
   </script>
 </body>
 </html>
-```
-
----
-
-## 主な変更点
-
-### 幼児向け画面（kids-viewer.html）
-1. **ボタンは3つだけ**
-   - ▶️ さいせい
-   - ⏸️ いちじていし
-   - ⏭️ こうこく とばす（再生後3秒で表示）
-
-2. **広告スキップ機能**
-   - 大きくて押しやすいオレンジ色のボタン
-   - 押すと10秒間だけ画面ロック解除
-   - 10秒後に自動的にロック復帰
-
-3. **完了画面**
-   - 視聴時間終了またはプレイリスト終了時に表示
-   - 「🎉 おわったよ！よくできました！」
-
-### URL生成ツール（kids-generator.html）
-1. **全ての設定をURLパラメータで指定**
-   - `playlist`: 動画ID（カンマ区切り）
-   - `loop`: ループ再生（1=オン）
-   - `auto`: 自動再生（1=オン）
-   - `time`: 視聴時間制限（分）
-   - `lock`: 画面ロック（0=オフ、デフォルトオン）
-
-2. **排他制御**
-   - ループと自動再生は同時にオンにできない
-
----
-
-## 使用例
-
-### 例1：寝かしつけ用（1動画ループ、30分）
-```
-https://ma-ha720.github.io/kids-viewer/?playlist=子守唄ID&loop=1&time=30
-```
-
-### 例2：教育動画プレイリスト（自動再生、制限なし）
-```
-https://ma-ha720.github.io/kids-viewer/?playlist=動画1,動画2,動画3&auto=1
-```
-
-### 例3：お気に入り動画（ロックなし、15分）
-```
-https://ma-ha720.github.io/kids-viewer/?playlist=動画ID&time=15&lock=0
