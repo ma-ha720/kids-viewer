@@ -60,13 +60,19 @@
     }
     
     .form-group input,
-    .form-group select {
+    .form-group select,
+    .form-group textarea {
       width: 100%;
       padding: 12px;
       border: 2px solid #e0e0e0;
       border-radius: 8px;
       font-size: 15px;
       font-family: inherit;
+    }
+    
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
     }
     
     .form-group small {
@@ -90,7 +96,7 @@
       align-items: center;
     }
     
-    .video-item input {
+    .video-item textarea {
       flex: 1;
     }
     
@@ -103,6 +109,7 @@
       cursor: pointer;
       font-size: 14px;
       transition: background 0.3s;
+      align-self: flex-start;
     }
     
     .video-item button:hover {
@@ -245,18 +252,21 @@
       <h2>📺 動画設定</h2>
       
       <div class="form-group">
-        <label>動画ID一覧</label>
+        <label>YouTube動画URL</label>
         <div id="videoList" class="video-list">
           <div class="video-item">
-            <input type="text" class="video-id-input" placeholder="例：dQw4w9WgXcQ">
+            <textarea class="video-url-input" placeholder="例：https://www.youtube.com/watch?v=dQw4w9WgXcQ" rows="2"></textarea>
             <button onclick="removeVideo(this)">削除</button>
           </div>
         </div>
         <button class="add-video-btn" onclick="addVideoInput()">➕ 動画を追加</button>
         <small>
-          YouTubeの動画IDを入力してください。<br>
-          動画ID は YouTube URLの「v=」の後ろの部分です。<br>
-          例：https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>
+          YouTubeの動画URLを貼り付けてください。<br>
+          対応形式：<br>
+          • https://www.youtube.com/watch?v=VIDEO_ID<br>
+          • https://youtu.be/VIDEO_ID<br>
+          • https://www.youtube.com/embed/VIDEO_ID<br>
+          または動画IDだけでもOKです。
         </small>
       </div>
     </div>
@@ -298,7 +308,7 @@
         <label for="lockCheck">画面をロックする（タップ防止）</label>
       </div>
       <small style="display:block; margin-left:34px; color:#666;">
-        ※ 親御さんが「スキップ」ボタンを押すと10秒間だけロックが解除されます
+        ※ 親御さんが「スキップ」ボタンを押すと5秒間だけロックが解除されます
       </small>
     </div>
     
@@ -320,7 +330,7 @@
       <ul>
         <li><strong>親御さんの操作：</strong>
           <ul>
-            <li>YouTube動画のIDを入力</li>
+            <li>YouTubeの動画URLをコピーして貼り付け</li>
             <li>再生方法と視聴時間を設定</li>
             <li>URLを生成してお子様に共有</li>
           </ul>
@@ -336,7 +346,7 @@
         <li><strong>広告スキップ：</strong>
           <ul>
             <li>親御さん用の小さな「スキップ」ボタンが右上に表示</li>
-            <li>押すと10秒間だけ画面ロックが解除</li>
+            <li>押すと5秒間だけ画面ロックが解除</li>
           </ul>
         </li>
       </ul>
@@ -363,7 +373,7 @@
       const div = document.createElement('div');
       div.className = 'video-item';
       div.innerHTML = `
-        <input type="text" class="video-id-input" placeholder="例：dQw4w9WgXcQ">
+        <textarea class="video-url-input" placeholder="例：https://www.youtube.com/watch?v=dQw4w9WgXcQ" rows="2"></textarea>
         <button onclick="removeVideo(this)">削除</button>
       `;
       videoList.appendChild(div);
@@ -378,14 +388,49 @@
       }
     }
     
+    function extractVideoId(input) {
+      const text = input.trim();
+      
+      // すでに動画IDの形式（11文字の英数字とハイフン・アンダースコア）
+      if (/^[a-zA-Z0-9_-]{11}$/.test(text)) {
+        return text;
+      }
+      
+      // 通常のYouTube URL: https://www.youtube.com/watch?v=VIDEO_ID
+      let match = text.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+      
+      // 短縮URL: https://youtu.be/VIDEO_ID
+      match = text.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+      
+      // 埋め込みURL: https://www.youtube.com/embed/VIDEO_ID
+      match = text.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+      
+      // ショートURL: https://youtube.com/shorts/VIDEO_ID
+      match = text.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+      if (match) return match[1];
+      
+      return null;
+    }
+    
     function generateUrl() {
-      const inputs = document.querySelectorAll('.video-id-input');
-      const videoIds = Array.from(inputs)
-        .map(input => input.value.trim())
-        .filter(id => id !== '');
+      const inputs = document.querySelectorAll('.video-url-input');
+      const videoIds = [];
+      
+      for (let input of inputs) {
+        const videoId = extractVideoId(input.value);
+        if (videoId) {
+          videoIds.push(videoId);
+        } else if (input.value.trim() !== '') {
+          alert('無効なYouTube URLまたは動画IDが含まれています：\n' + input.value);
+          return;
+        }
+      }
       
       if (videoIds.length === 0) {
-        alert('最低1つの動画IDを入力してください');
+        alert('最低1つの動画URLまたはIDを入力してください');
         return;
       }
       
