@@ -15,55 +15,131 @@
       font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
       background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
       min-height: 100vh;
-      padding: 20px;
+      padding: 10px;
+      overflow-x: hidden;
     }
     
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       background: white;
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       overflow: hidden;
+      position: relative;
     }
+    
+    /* ブロックタイマー（画面右側） */
+    .block-timer {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 8px;
+      z-index: 999;
+    }
+    
+    .block {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      position: relative;
+    }
+    
+    .block::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+      border-radius: 12px;
+    }
+    
+    .block.disappear {
+      transform: scale(0) rotate(180deg);
+      opacity: 0;
+    }
+    
+    .block.shake {
+      animation: shake 0.5s ease;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px) rotate(-5deg); }
+      75% { transform: translateX(10px) rotate(5deg); }
+    }
+    
+    /* カラフルなブロックの色 */
+    .block:nth-child(10n+1) { background: linear-gradient(135deg, #FF6B6B 0%, #C92A2A 100%); }
+    .block:nth-child(10n+2) { background: linear-gradient(135deg, #4ECDC4 0%, #1A535C 100%); }
+    .block:nth-child(10n+3) { background: linear-gradient(135deg, #FFE66D 0%, #F4A261 100%); }
+    .block:nth-child(10n+4) { background: linear-gradient(135deg, #A8DADC 0%, #457B9D 100%); }
+    .block:nth-child(10n+5) { background: linear-gradient(135deg, #F08080 0%, #E63946 100%); }
+    .block:nth-child(10n+6) { background: linear-gradient(135deg, #98D8C8 0%, #6BCF7F 100%); }
+    .block:nth-child(10n+7) { background: linear-gradient(135deg, #FFB6D9 0%, #D946A6 100%); }
+    .block:nth-child(10n+8) { background: linear-gradient(135deg, #C4A1FF 0%, #8B5CF6 100%); }
+    .block:nth-child(10n+9) { background: linear-gradient(135deg, #FDCB6E 0%, #E17055 100%); }
+    .block:nth-child(10n+10) { background: linear-gradient(135deg, #74B9FF 0%, #0984E3 100%); }
     
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 30px;
+      padding: 25px;
       text-align: center;
+      position: relative;
     }
     
     .header h1 {
-      font-size: 42px;
+      font-size: 48px;
       margin: 0;
+    }
+    
+    /* 広告スキップボタン（親用・右上） */
+    .ad-skip-parent {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 6px 12px;
+      font-size: 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 1001;
+      opacity: 0.7;
+    }
+    
+    .ad-skip-parent:hover {
+      background: rgba(255, 255, 255, 0.3);
+      opacity: 1;
+    }
+    
+    .ad-skip-parent:active {
+      transform: scale(0.95);
+    }
+    
+    .ad-skip-parent.hidden {
+      display: none;
     }
     
     .content {
       padding: 30px;
-    }
-    
-    /* タイマー表示 */
-    .timer-display {
-      background: #fff3cd;
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      font-size: 36px;
-      font-weight: bold;
-      color: #856404;
-      margin-bottom: 30px;
-    }
-    
-    .timer-display.warning {
-      background: #f8d7da;
-      color: #721c24;
-      animation: pulse 1s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+      padding-right: 100px;
     }
     
     /* 動画プレイヤー */
@@ -72,7 +148,7 @@
       padding-bottom: 56.25%;
       height: 0;
       overflow: hidden;
-      border-radius: 16px;
+      border-radius: 20px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
       background: #000;
       margin-bottom: 30px;
@@ -114,49 +190,63 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      padding: 30px 60px;
-      font-size: 32px;
+      padding: 35px 70px;
+      font-size: 48px;
       font-weight: bold;
-      border-radius: 20px;
+      border-radius: 25px;
       cursor: pointer;
       transition: all 0.3s;
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-      min-width: 200px;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      min-width: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .control-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .control-btn:hover::before {
+      left: 100%;
     }
     
     .control-btn:active {
       transform: scale(0.95);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    }
-    
-    .control-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
-    .control-btn.ad-skip {
-      background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
-      box-shadow: 0 8px 20px rgba(255, 167, 38, 0.4);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
     }
     
     /* 広告通知 */
     .ad-notice {
-      background: #fff3cd;
-      padding: 20px;
-      border-radius: 16px;
+      background: linear-gradient(135deg, #fff3cd 0%, #ffe4a3 100%);
+      padding: 15px;
+      border-radius: 12px;
       text-align: center;
       margin-top: 20px;
       display: none;
+      border: 3px solid #ffc107;
     }
     
     .ad-notice.show {
       display: block;
+      animation: bounce 0.6s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
     
     .ad-notice p {
       color: #856404;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 18px;
       margin: 0;
     }
     
@@ -168,56 +258,156 @@
     .completion-screen {
       text-align: center;
       padding: 60px 30px;
+      background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     
-    .completion-icon {
-      font-size: 120px;
+    .sleeping-character {
+      font-size: 200px;
       margin-bottom: 30px;
-      animation: bounce 1s ease;
+      animation: sleep 2s ease-in-out infinite;
     }
     
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-30px); }
+    @keyframes sleep {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    .zzz {
+      position: absolute;
+      font-size: 60px;
+      opacity: 0;
+      animation: float-zzz 3s ease-in-out infinite;
+    }
+    
+    .zzz:nth-child(1) { left: 35%; animation-delay: 0s; }
+    .zzz:nth-child(2) { left: 45%; animation-delay: 1s; }
+    .zzz:nth-child(3) { left: 55%; animation-delay: 2s; }
+    
+    @keyframes float-zzz {
+      0% { transform: translateY(0); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translateY(-100px); opacity: 0; }
     }
     
     .completion-screen h2 {
       color: #667eea;
-      font-size: 48px;
+      font-size: 72px;
       margin-bottom: 20px;
     }
     
-    .completion-screen p {
-      color: #666;
-      font-size: 28px;
-      line-height: 1.8;
-    }
-    
+    /* スマホ横向き対応 */
     @media (max-width: 768px) {
-      body {
-        padding: 10px;
+      .block-timer {
+        right: 5px;
+        gap: 5px;
       }
       
-      .header h1 {
-        font-size: 32px;
+      .block {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
       }
       
       .content {
         padding: 20px;
+        padding-right: 60px;
+      }
+      
+      .header h1 {
+        font-size: 36px;
+      }
+      
+      .ad-skip-parent {
+        font-size: 10px;
+        padding: 5px 10px;
       }
       
       .control-btn {
         width: 100%;
-        padding: 25px 40px;
-        font-size: 28px;
-      }
-      
-      .timer-display {
-        font-size: 28px;
+        padding: 30px 50px;
+        font-size: 36px;
       }
       
       .ad-notice p {
-        font-size: 20px;
+        font-size: 16px;
+      }
+      
+      .sleeping-character {
+        font-size: 150px;
+      }
+      
+      .completion-screen h2 {
+        font-size: 48px;
+      }
+    }
+    
+    /* スマホ横向き（ランドスケープ）専用 */
+    @media (max-width: 960px) and (orientation: landscape) {
+      body {
+        padding: 5px;
+      }
+      
+      .container {
+        border-radius: 10px;
+      }
+      
+      .header {
+        padding: 15px;
+      }
+      
+      .header h1 {
+        font-size: 28px;
+      }
+      
+      .content {
+        padding: 15px;
+        padding-right: 60px;
+      }
+      
+      .video-wrapper {
+        margin-bottom: 15px;
+      }
+      
+      .controls {
+        gap: 10px;
+      }
+      
+      .control-btn {
+        padding: 20px 40px;
+        font-size: 32px;
+        min-width: 150px;
+      }
+      
+      .block-timer {
+        right: 5px;
+        gap: 3px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      
+      .block {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+      }
+      
+      .ad-skip-parent {
+        font-size: 9px;
+        padding: 4px 8px;
+      }
+      
+      .ad-notice {
+        padding: 10px;
+        margin-top: 10px;
+      }
+      
+      .ad-notice p {
+        font-size: 14px;
       }
     }
   </style>
@@ -225,14 +415,16 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎈 どうが 🎈</h1>
+      <h1>🎈</h1>
+      <!-- 親用広告スキップボタン（右上・小さい） -->
+      <button class="ad-skip-parent hidden" id="adSkipParentBtn" onclick="enableAdSkip()">
+        スキップ
+      </button>
     </div>
     
     <div class="content" id="mainContent">
-      <!-- タイマー表示 -->
-      <div id="timerDisplay" class="timer-display hidden">
-        のこり: <span id="remainingTime">--:--</span>
-      </div>
+      <!-- ブロックタイマー -->
+      <div id="blockTimer" class="block-timer"></div>
       
       <!-- 動画プレイヤー -->
       <div class="video-wrapper">
@@ -243,27 +435,28 @@
       <!-- コントロールボタン -->
       <div class="controls">
         <button class="control-btn" id="playBtn" onclick="playVideo()">
-          ▶️<br>さいせい
+          ▶️
         </button>
         <button class="control-btn hidden" id="pauseBtn" onclick="pauseVideo()">
-          ⏸️<br>いちじていし
-        </button>
-        <button class="control-btn ad-skip hidden" id="adSkipBtn" onclick="enableAdSkip()">
-          ⏭️<br>こうこく<br>とばす
+          ⏸️
         </button>
       </div>
       
       <!-- 広告通知 -->
       <div id="adNotice" class="ad-notice">
-        <p>⏳ 10びょうかん こうこくをとばせるよ</p>
+        <p>広告スキップ中です（10秒間）</p>
       </div>
     </div>
     
     <!-- 完了画面 -->
     <div id="completionScreen" class="completion-screen hidden">
-      <div class="completion-icon">🎉</div>
-      <h2>おわったよ！</h2>
-      <p>よくできました！</p>
+      <div style="position: relative; width: 100%;">
+        <div class="zzz">💤</div>
+        <div class="zzz">💤</div>
+        <div class="zzz">💤</div>
+        <div class="sleeping-character">😴</div>
+      </div>
+      <h2>👋 バイバイ</h2>
     </div>
   </div>
   
@@ -273,6 +466,8 @@
     let currentVideoIndex = 0;
     let startTime = null;
     let timerInterval = null;
+    let totalBlocks = 0;
+    let currentBlock = 0;
     
     // URLパラメータから設定を取得
     const urlParams = new URLSearchParams(window.location.search);
@@ -280,7 +475,7 @@
     const isLooping = urlParams.get('loop') === '1';
     const isAutoplay = urlParams.get('auto') === '1';
     const timeLimit = parseInt(urlParams.get('time') || '0'); // 分単位
-    const isLocked = urlParams.get('lock') !== '0'; // デフォルトでロック
+    const isLocked = urlParams.get('lock') !== '0';
     
     // プレイリストを解析
     const playlist = playlistParam.split(',').map(id => id.trim());
@@ -300,9 +495,26 @@
         overlay.classList.add('unlocked');
       }
       
-      // タイマー表示
+      // ブロックタイマーを初期化
       if (timeLimit > 0) {
-        document.getElementById('timerDisplay').classList.remove('hidden');
+        initBlockTimer();
+      }
+    }
+    
+    function initBlockTimer() {
+      // 1分1個で計算
+      totalBlocks = timeLimit;
+      currentBlock = totalBlocks;
+      
+      const blockTimer = document.getElementById('blockTimer');
+      blockTimer.innerHTML = '';
+      
+      // ブロックを生成
+      for (let i = 0; i < totalBlocks; i++) {
+        const block = document.createElement('div');
+        block.className = 'block';
+        block.innerHTML = (i + 1);
+        blockTimer.appendChild(block);
       }
     }
     
@@ -345,9 +557,9 @@
         document.getElementById('playBtn').classList.add('hidden');
         document.getElementById('pauseBtn').classList.remove('hidden');
         
-        // 広告スキップボタンを表示（再生開始から3秒後）
+        // 親用広告スキップボタンを表示（再生開始から3秒後）
         setTimeout(() => {
-          document.getElementById('adSkipBtn').classList.remove('hidden');
+          document.getElementById('adSkipParentBtn').classList.remove('hidden');
         }, 3000);
         
         // タイマー開始
@@ -392,12 +604,12 @@
     function enableAdSkip() {
       const overlay = document.getElementById('videoBlockOverlay');
       const notice = document.getElementById('adNotice');
-      const btn = document.getElementById('adSkipBtn');
+      const btn = document.getElementById('adSkipParentBtn');
       
       overlay.classList.add('unlocked');
       notice.classList.add('show');
       btn.disabled = true;
-      btn.innerHTML = '⏳<br>まって<br>てね';
+      btn.style.opacity = '0.5';
       
       setTimeout(() => {
         overlay.classList.remove('unlocked');
@@ -407,16 +619,43 @@
         notice.classList.remove('show');
         btn.classList.add('hidden');
         btn.disabled = false;
-        btn.innerHTML = '⏭️<br>こうこく<br>とばす';
+        btn.style.opacity = '0.7';
       }, 10000);
     }
     
     function startTimer() {
       if (timeLimit === 0) return;
       
+      // 1分ごとに1個消える
       timerInterval = setInterval(() => {
-        updateTimerDisplay();
-      }, 1000);
+        removeBlock();
+      }, 60000); // 60秒 = 1分
+    }
+    
+    function removeBlock() {
+      if (currentBlock <= 0) {
+        stopTimer();
+        if (player && playerReady) {
+          player.pauseVideo();
+        }
+        showCompletionScreen();
+        return;
+      }
+      
+      const blocks = document.querySelectorAll('.block');
+      const blockToRemove = blocks[currentBlock - 1];
+      
+      if (blockToRemove) {
+        // シェイクアニメーション
+        blockToRemove.classList.add('shake');
+        
+        setTimeout(() => {
+          blockToRemove.classList.remove('shake');
+          blockToRemove.classList.add('disappear');
+        }, 500);
+      }
+      
+      currentBlock--;
     }
     
     function stopTimer() {
@@ -426,36 +665,10 @@
       }
     }
     
-    function updateTimerDisplay() {
-      if (!startTime || timeLimit === 0) return;
-      
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const totalSeconds = timeLimit * 60;
-      const remaining = Math.max(0, totalSeconds - elapsed);
-      
-      const minutes = Math.floor(remaining / 60);
-      const seconds = remaining % 60;
-      
-      const display = document.getElementById('timerDisplay');
-      document.getElementById('remainingTime').textContent = 
-        `${minutes}:${seconds.toString().padStart(2, '0')}`;
-      
-      if (remaining <= 60) {
-        display.classList.add('warning');
-      }
-      
-      if (remaining === 0) {
-        if (player && playerReady) {
-          player.pauseVideo();
-        }
-        stopTimer();
-        showCompletionScreen();
-      }
-    }
-    
     function showCompletionScreen() {
       document.getElementById('mainContent').classList.add('hidden');
       document.getElementById('completionScreen').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
   </script>
 </body>
