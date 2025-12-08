@@ -251,7 +251,7 @@
     }
     
     .hidden {
-      display: none;
+      display: none !important;
     }
     
     /* 完了画面 */
@@ -259,11 +259,15 @@
       text-align: center;
       padding: 60px 30px;
       background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
-      min-height: 80vh;
-      display: flex;
+      min-height: 600px;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+    }
+    
+    .completion-screen.show {
+      display: flex;
     }
     
     .sleeping-character {
@@ -449,7 +453,7 @@
     </div>
     
     <!-- 完了画面 -->
-    <div id="completionScreen" class="completion-screen hidden">
+    <div id="completionScreen" class="completion-screen">
       <div style="position: relative; width: 100%;">
         <div class="zzz">💤</div>
         <div class="zzz">💤</div>
@@ -474,7 +478,7 @@
     const playlistParam = urlParams.get('playlist') || 'dQw4w9WgXcQ';
     const isLooping = urlParams.get('loop') === '1';
     const isAutoplay = urlParams.get('auto') === '1';
-    const timeLimit = parseInt(urlParams.get('time') || '0'); // 分単位
+    const timeLimit = parseInt(urlParams.get('time') || '0');
     const isLocked = urlParams.get('lock') !== '0';
     
     // プレイリストを解析
@@ -502,14 +506,12 @@
     }
     
     function initBlockTimer() {
-      // 1分1個で計算
       totalBlocks = timeLimit;
       currentBlock = totalBlocks;
       
       const blockTimer = document.getElementById('blockTimer');
       blockTimer.innerHTML = '';
       
-      // ブロックを生成
       for (let i = 0; i < totalBlocks; i++) {
         const block = document.createElement('div');
         block.className = 'block';
@@ -557,12 +559,10 @@
         document.getElementById('playBtn').classList.add('hidden');
         document.getElementById('pauseBtn').classList.remove('hidden');
         
-        // 親用広告スキップボタンを表示（再生開始から3秒後）
         setTimeout(() => {
           document.getElementById('adSkipParentBtn').classList.remove('hidden');
         }, 3000);
         
-        // タイマー開始
         if (!startTime && timeLimit > 0) {
           startTime = Date.now();
           startTimer();
@@ -626,10 +626,9 @@
     function startTimer() {
       if (timeLimit === 0) return;
       
-      // 1分ごとに1個消える
       timerInterval = setInterval(() => {
         removeBlock();
-      }, 60000); // 60秒 = 1分
+      }, 60000);
     }
     
     function removeBlock() {
@@ -646,7 +645,6 @@
       const blockToRemove = blocks[currentBlock - 1];
       
       if (blockToRemove) {
-        // シェイクアニメーション
         blockToRemove.classList.add('shake');
         
         setTimeout(() => {
@@ -666,9 +664,11 @@
     }
     
     function showCompletionScreen() {
+      // 動画コンテンツを非表示
       document.getElementById('mainContent').classList.add('hidden');
-      document.getElementById('completionScreen').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+      
+      // 完了画面を表示
+      document.getElementById('completionScreen').classList.add('show');
     }
   </script>
 </body>
